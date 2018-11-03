@@ -1,0 +1,81 @@
+---
+- hosts: vmhosts
+#-vars:
+#-remote_user: vm-user
+  tasks:
+  - name: Enable sshd service
+    service:
+      name: sshd
+      state: started
+    become: yes
+  #- name: Configure sshd service
+    # copy template config from share
+    # listen only on heartbeat and primary IP
+    # no root login
+    # pubkey only
+  #- name: enable ipmi on physical hosts
+    #service:
+    #- name: ipmi
+      #state: started
+    #become: yes
+  - name: update apt
+    apt:  
+      force_apt_get: yes
+      update_cache: yes
+      upgrade: yes
+      state: latest
+    become: yes
+  - name: install packages
+    apt:
+      update_cache: yes
+      name: "{{packages}}"
+      state: latest
+      install_recommends: yes
+    vars:
+      packages:
+        - bridge-utils
+        - cpu-checker
+        - ipxe-qemu
+        - libvirt-bin
+        - libvirt-doc
+        - libqcow-utils
+        - mom
+        - open-iscsi
+        - p7zip
+        - qemu-efi
+        - qemu-kvm
+        - qemu-system-arm
+        - qemu-system-common
+        - qemu-system-mips
+        - qemu-system-sparc
+        - qemu-system-x86
+        - qemu-utils
+        - qemu-user
+        - seabios
+        - screen
+        - ubuntu-vm-builder
+        - vgabios
+        - virtinst
+        - virt-goodies
+        - virt-top
+        - xvfb
+    become: yes
+  - name: Enable libvirtd service
+    service:
+      name: libvirtd
+      state: started
+    become: yes
+  #- name: Configure bridge interface(s)
+  #
+  #
+  #
+  - name: Reload systemctl daemon
+    systemd:
+      daemon_reload: yes
+    become: yes
+  - name: Restart networks
+    systemd:
+      name: networking.service
+      state: restarted
+    become: yes
+...

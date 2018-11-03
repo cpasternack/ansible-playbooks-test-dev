@@ -1,0 +1,44 @@
+---
+- hosts: ubuntu16_winehosts
+  tasks:
+  - name: Update apt
+    apt:  
+      force_apt_get: yes
+      update_cache: yes
+      upgrade: yes
+      state: latest
+    become: yes
+  - name: Configure ssh X11 forwarding
+  - name: Install winehost packages
+    apt:
+      update_cache: yes
+      name: "{{packages}}"
+      state: latest
+      install_recommends: yes
+    vars:
+      packages:
+        - open-iscsi
+        - p7zip
+        - qemu-guest-agent
+        - screen
+        - wine-mono0.0.8
+        - wine-1.6
+        - wine-tricks
+        - xvfb
+    become: yes
+#- name: set and configure display shell var
+  #shell: export DISPLAY=0.0
+  #ignore_errors: False
+#- name: set and create wineprefix
+  #shell: export wine_args="WINEARCH=win32 WINEPREFIX=~/WINEODBC
+  #shell: $wine_args winecfg
+  #ignore_errors: False
+#- name: Configure winetricks fonts
+#- name: Configure winetricks vb6run
+#- name: Configure winetricks mdac28
+#- name: Configure winetricks odbc32
+#- name: Run Wine Regedit to set odbc sources
+  #shell: export WINEODBC_FILE=/mnt/serverFiles/wine32ODBC
+  #shell: wine regedit ${WINEODBC_FILE).reg
+
+...

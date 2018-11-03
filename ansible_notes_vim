@@ -1,0 +1,5 @@
+set tabstop=4 softtabstop=0 expandtab shiftwidth=2 smarttab
+
+ansible-playbook playbooks/ubuntu-vmhost.yml --extra-vars "ansible_sudo_pass=password"
+
+ansible-playbook playbooks/ubuntu-vmhost.yml --ask-become-pass
